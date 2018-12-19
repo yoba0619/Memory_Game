@@ -1,8 +1,18 @@
+/*
+ * Create a list that holds all of your cards
+ */
 let cards = Array.from(document.querySelectorAll('.card'));
 let de = document.querySelector('.deck');
 let stars = document.querySelector('.stars');
 let clockOff = true;
 let interval;
+let exit = document.querySelector('#exit');
+let resetButton = document.querySelector('.restart')
+let timer = document.querySelector('.timer');
+var arr = [];
+let mCounter = 0;
+let moves = document.querySelector('.moves');
+let won = false;
 
 /*
  * Display the cards on the page
@@ -14,6 +24,15 @@ let interval;
 function display(array){
     shuffle(array);
     for(let card of array){
+        if(card.classList.contains('show')){
+            card.classList.toggle('show');
+        }
+        if(card.classList.contains('open')){
+            card.classList.toggle('open');
+        }
+        if(card.classList.toggle('match')){
+            card.classList.toggle('match');
+        }
         card.classList.toggle('show');
         de.appendChild(card);
     }
@@ -34,7 +53,6 @@ function shuffle(array) {
     return array;
 }
 
-
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -47,25 +65,19 @@ function shuffle(array) {
  */
 
 
-var arr = [];
 
-let mCounter = 0
-let moves = document.querySelector('.moves')
 function addMove(){
     mCounter +=1;
     moves.innerHTML = mCounter;
 }
 
 function respondToTheClick(evt) {
-    
-    
     if(arr.length < 1 && !evt.target.classList.contains('match')){
         arr.push(evt.target);
         toggleCard(evt.target);
         addMove();
         decStars();
-    }
-    
+    }  
     else if(arr.length < 2 && !evt.target.classList.contains('match')){
         arr.push(evt.target);
         if(arr[0] !== arr[1] && arr[1].parentElement !== arr[0] && arr[0].parentElement !== arr[1]){
@@ -89,9 +101,7 @@ function respondToTheClick(evt) {
         }else{
             arr.pop()
         }
-    }
-     
-
+    }   
 }
 
 function matching(evtir){
@@ -101,7 +111,6 @@ function matching(evtir){
 function toggleCard(evtt){
     evtt.classList.toggle('open');
     evtt.classList.toggle('show');
-
 }
 
 function poping(array){
@@ -132,11 +141,9 @@ function time(){
         timePassed +=1;
         displayTimer();
     }, 1000)
-
 }
 
 function displayTimer(){
-    let timer = document.querySelector('.timer');
     let minutes = Math.floor(timePassed/60);
     let seconds = timePassed%60;
     if(seconds < 10){
@@ -144,7 +151,6 @@ function displayTimer(){
     } else{
         timer.innerHTML = `${minutes}:${seconds}`;
     }
-    
 }
 
 function stopTimer(){
@@ -162,15 +168,52 @@ function getResults(){
     modelStars.innerHTML = `Stars = ${stars.childElementCount}`;
 }
 
-de.addEventListener('click', evt =>{
-    if(evt.target.classList.contains('card') && clockOff ){
-        time();
-        clockOff = false;
-    }
-})
-
-
-for( let card of cards){
-    card.addEventListener('click', respondToTheClick);
+function memorize(){
+    setTimeout(() => {
+        for(let card of cards){
+            if(card.classList.contains('show')){
+                card.classList.toggle('show');
+            }
+        }
+    }, 6000);
 }
 
+function reset(){
+    stopTimer();
+    timer.innerHTML = 0;
+    timePassed = 0;
+    mCounter = 0;
+    document.querySelector('.moves').innerHTML = mCounter;
+    clockOff = true;
+    // displayTimer();
+    let aStar = document.createElement('li');
+    aStar.innerHTML = '<i class="fa fa-star"></i>';
+    if(stars.childElementCount == 1){
+        stars.appendChild(aStar);
+        stars.appendChild(aStar);
+    } else if(stars.childElementCount == 2){
+        stars.appendChild(aStar);
+    }
+    display(cards);
+    memorize();
+}
+
+
+
+function createGame(){
+    resetButton.addEventListener('click', reset)
+    de.addEventListener('click', evt =>{
+        if(evt.target.classList.contains('card') && clockOff ){
+            time();
+            clockOff = false;
+        }
+    })
+    exit.addEventListener('click', toggleResults)
+    for( let card of cards){
+        card.addEventListener('click', respondToTheClick);
+    }
+    display(cards);
+    memorize();
+}
+
+createGame();
