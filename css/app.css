@@ -118,8 +118,8 @@ h1 {
 }
 
 .model_title{
-    text-align: center;
     margin-top: 10px;
+    
 }
 
 .model_results{
@@ -132,4 +132,19 @@ h1 {
 
 .hide{
     display: none;
+}
+
+.model_heading{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#exit{
+    transform: translate(12vw,-1vh);
+    padding: 0.5em;
+}
+
+.restart{
+    padding: 0.4em;
 }
