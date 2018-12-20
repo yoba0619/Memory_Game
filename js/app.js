@@ -1,4 +1,4 @@
-/*
+//*
  * Create a list that holds all of your cards
  */
 let cards = Array.from(document.querySelectorAll('.card'));
@@ -12,7 +12,7 @@ let timer = document.querySelector('.timer');
 var arr = [];
 let mCounter = 0;
 let moves = document.querySelector('.moves');
-let won = false;
+let matched = 0;
 
 /*
  * Display the cards on the page
@@ -89,8 +89,10 @@ function respondToTheClick(evt) {
                     matching(arr[0]);
                     matching(arr[1]);
                     poping(arr);
+                    checkGameOver();
                 }, 1000);
-            }
+                
+            }    
             else{
                 setTimeout(() => {
                     toggleCard(arr[0]);
@@ -98,14 +100,18 @@ function respondToTheClick(evt) {
                     poping(arr);
                 }, 1000);
             }
+            
         }else{
             arr.pop()
         }
-    }   
+        
+    }
+    
 }
 
 function matching(evtir){
     evtir.classList.toggle('match')
+    matched += 1;
 }
 
 function toggleCard(evtt){
@@ -214,6 +220,14 @@ function createGame(){
     }
     display(cards);
     memorize();
+}
+
+function checkGameOver(){
+    if(matched == 16){
+        getResults();
+        stopTimer();
+        toggleResults();
+    }
 }
 
 createGame();
