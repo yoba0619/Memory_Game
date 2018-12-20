@@ -7,7 +7,8 @@ let stars = document.querySelector('.stars');
 let clockOff = true;
 let interval;
 let exit = document.querySelector('#exit');
-let resetButton = document.querySelector('.restart')
+let resetButton = document.querySelector('.restart');
+let replayButton = document.querySelector('.replayButton');
 let timer = document.querySelector('.timer');
 var arr = [];
 let mCounter = 0;
@@ -192,24 +193,35 @@ function reset(){
     } else if(stars.childElementCount == 2){
         stars.appendChild(aStar);
     }
+    if(arr.length < 2){
+        arr.pop();
+    }
     display(cards);
     memorize();
 }
 //Shuffles cards then make them appear for 6 seconds
 function createGame(){
-    resetButton.addEventListener('click', reset)
-    de.addEventListener('click', evt =>{
-        if(evt.target.classList.contains('card') && clockOff ){
-            time();
-            clockOff = false;
-        }
-    })
-    exit.addEventListener('click', toggleResults)
-    for( let card of cards){
-        card.addEventListener('click', respondToTheClick);
-    }
+    resetButton.addEventListener('click', reset);
+    replayButton.addEventListener('click', function(){
+        reset();
+        toggleResults();
+    });
+    setTimeout(() => {
+        de.addEventListener('click', evt =>{
+            if(evt.target.classList.contains('card') && clockOff ){
+                time();
+                clockOff = false;
+            }
+        });
+    }, 6000);
+    exit.addEventListener('click', toggleResults);
     display(cards);
     memorize();
+    setTimeout(() => {
+        for( let card of cards){
+            card.addEventListener('click', respondToTheClick);
+        }
+    }, 6000);
 }
 //Sees if the number of matched cards is 16 then make the modal appear and stops the time
 function checkGameOver(){
