@@ -1,4 +1,4 @@
-//*
+/*
  * Create a list that holds all of your cards
  */
 let cards = Array.from(document.querySelectorAll('.card'));
@@ -13,14 +13,13 @@ var arr = [];
 let mCounter = 0;
 let moves = document.querySelector('.moves');
 let matched = 0;
-
+let timePassed = 0;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
 function display(array){
     shuffle(array);
     for(let card of array){
@@ -37,7 +36,6 @@ function display(array){
         de.appendChild(card);
     }
 }
-
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -49,10 +47,8 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
-
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -63,9 +59,6 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-
-
-
 function addMove(){
     mCounter +=1;
     moves.innerHTML = mCounter;
@@ -91,7 +84,6 @@ function respondToTheClick(evt) {
                     poping(arr);
                     checkGameOver();
                 }, 1000);
-                
             }    
             else{
                 setTimeout(() => {
@@ -100,13 +92,10 @@ function respondToTheClick(evt) {
                     poping(arr);
                 }, 1000);
             }
-            
         }else{
             arr.pop()
         }
-        
     }
-    
 }
 
 function matching(evtir){
@@ -124,7 +113,6 @@ function poping(array){
     array.pop()
 }
 
-
 function decStars(){
     if(moves.innerHTML == 21 || moves.innerHTML == 25 || moves.innerHTML == 29){
         stars.firstElementChild.remove();
@@ -139,8 +127,6 @@ function toggleResults(){
     model_title.classList.toggle('hide');
     model_results.classList.toggle('hide');
 }
-
-let timePassed = 0;
 
 function time(){
     interval = setInterval(() => {
@@ -162,7 +148,6 @@ function displayTimer(){
 function stopTimer(){
     clearInterval(interval);
 }
-
 
 function getResults(){
     let modelTime = document.querySelector('#model_time');
@@ -191,7 +176,6 @@ function reset(){
     mCounter = 0;
     document.querySelector('.moves').innerHTML = mCounter;
     clockOff = true;
-    // displayTimer();
     let aStar = document.createElement('li');
     aStar.innerHTML = '<i class="fa fa-star"></i>';
     if(stars.childElementCount == 1){
@@ -203,8 +187,6 @@ function reset(){
     display(cards);
     memorize();
 }
-
-
 
 function createGame(){
     resetButton.addEventListener('click', reset)
@@ -229,5 +211,4 @@ function checkGameOver(){
         toggleResults();
     }
 }
-
 createGame();
