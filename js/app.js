@@ -59,24 +59,29 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+//This funcrion increase the moves counter when called
 function addMove(){
     mCounter +=1;
     moves.innerHTML = mCounter;
 }
 
 function respondToTheClick(evt) {
+    //Checks if the array is empty, if so it will add the clicked card to it and keep the chosen card open. Also prevent from clicking an already matched card
     if(arr.length < 1 && !evt.target.classList.contains('match')){
         arr.push(evt.target);
         toggleCard(evt.target);
         addMove();
         decStars();
-    }  
+    }
+    //If thre's an already clicked card we will add the second clicked to the array
     else if(arr.length < 2 && !evt.target.classList.contains('match')){
         arr.push(evt.target);
+        //making sure whether the body or symbol of the card was clicked will be no problem
         if(arr[0] !== arr[1] && arr[1].parentElement !== arr[0] && arr[0].parentElement !== arr[1]){
             toggleCard(evt.target);
             addMove();
             decStars();
+            //Checks if we got match and then clear the array if it matched
             if(arr[1].innerHTML == arr[0].innerHTML){
                 setTimeout(() => {
                     matching(arr[0]);
@@ -84,7 +89,8 @@ function respondToTheClick(evt) {
                     poping(arr);
                     checkGameOver();
                 }, 1000);
-            }    
+            }
+            //If not match then will turn the cards down and clear the array
             else{
                 setTimeout(() => {
                     toggleCard(arr[0]);
@@ -92,6 +98,7 @@ function respondToTheClick(evt) {
                     poping(arr);
                 }, 1000);
             }
+        // Prevent double clicking the same card by popping it from array if happened
         }else{
             arr.pop()
         }
@@ -114,11 +121,12 @@ function poping(array){
 }
 
 function decStars(){
+    //decreases star ratings at 21, 25, 29
     if(moves.innerHTML == 21 || moves.innerHTML == 25 || moves.innerHTML == 29){
         stars.firstElementChild.remove();
     }
 }
-
+//if called the modal will appear
 function toggleResults(){
     let model = document.querySelector('.model');
     let model_title = document.querySelector('.model_title');
@@ -127,14 +135,14 @@ function toggleResults(){
     model_title.classList.toggle('hide');
     model_results.classList.toggle('hide');
 }
-
+//measure time passed in seconds
 function time(){
     interval = setInterval(() => {
         timePassed +=1;
         displayTimer();
     }, 1000)
 }
-
+//divide time to minute and seconds
 function displayTimer(){
     let minutes = Math.floor(timePassed/60);
     let seconds = timePassed%60;
@@ -148,7 +156,7 @@ function displayTimer(){
 function stopTimer(){
     clearInterval(interval);
 }
-
+//Writes the results to modal
 function getResults(){
     let modelTime = document.querySelector('#model_time');
     let timer = document.querySelector('.timer').innerHTML;
@@ -158,7 +166,7 @@ function getResults(){
     modelTime.innerHTML = `Time = ${timer}`;
     modelStars.innerHTML = `Stars = ${stars.childElementCount}`;
 }
-
+//Make the symbols apear for 6 seconds before disappearing
 function memorize(){
     setTimeout(() => {
         for(let card of cards){
@@ -168,7 +176,7 @@ function memorize(){
         }
     }, 6000);
 }
-
+//When the reset button pressed everything will go to it's initial state
 function reset(){
     stopTimer();
     timer.innerHTML = 0;
@@ -187,7 +195,7 @@ function reset(){
     display(cards);
     memorize();
 }
-
+//Shuffles cards then make them appear for 6 seconds
 function createGame(){
     resetButton.addEventListener('click', reset)
     de.addEventListener('click', evt =>{
@@ -203,7 +211,7 @@ function createGame(){
     display(cards);
     memorize();
 }
-
+//Sees if the number of matched cards is 16 then make the modal appear and stops the time
 function checkGameOver(){
     if(matched == 16){
         getResults();
